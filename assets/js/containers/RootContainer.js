@@ -1,0 +1,11 @@
+import React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+
+const RootContainer = () => (<React.Fragment>
+    <CssBaseline/>
+
+
+</React.Fragment>);
+
+export default RootContainer;
