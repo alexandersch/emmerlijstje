@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -19,6 +19,11 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="string", length=180)
      */
     private $displayName;
 
@@ -38,14 +43,14 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getDisplayName(): ?string
+    public function getUserame(): ?string
     {
-        return $this->displayName;
+        return $this->username;
     }
 
-    public function setDisplayName(string $displayName): self
+    public function setUsername(string $username): self
     {
-        $this->displayName = $displayName;
+        $this->username = $username;
 
         return $this;
     }
@@ -57,7 +62,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->displayName;
+        return (string)$this->username;
     }
 
     /**
@@ -84,7 +89,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -109,5 +114,30 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @param mixed $displayName
+     */
+    public function setDisplayName($displayName): void
+    {
+        $this->displayName = $displayName;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "username" => $this->getUsername(),
+            "displayName" => $this->getDisplayName(),
+            "roles" => $this->getRoles()
+        ];
     }
 }

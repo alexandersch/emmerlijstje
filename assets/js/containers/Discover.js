@@ -10,7 +10,7 @@ const Discover = (props) => {
 
             <Grid container justify="center">
                 <Grid item xs={ 12 }>
-                    <Typography align={ 'center' } variant={ 'h3' }>Emmerlijstjes van anderen</Typography>
+                    <Typography align={ 'center' } variant={ 'h4' }>Emmerlijstjes van anderen</Typography>
                 </Grid>
             </Grid>
 

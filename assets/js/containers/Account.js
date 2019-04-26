@@ -1,26 +1,40 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import {Grid, Typography} from '@material-ui/core';
 import Login from './Login';
+import {connect} from "react-redux";
+import * as authenticationActions from './../actions/authentication';
+import Button from "@material-ui/core/Button";
 
-const Account = ({ user, csrf }) => {
+const Account = (props) => {
+    const {user} = props.authentication;
+    const {userLogout} = props;
 
     return (
         <React.Fragment>
 
             <Grid container justify="center">
-                <Grid item xs={ 12 }>
-                    { user && (
-                        <Typography align={ 'center' } variant={ 'h3' }>Account</Typography>
-                    ) || <Login/> }
+                <Grid item xs={11} md={6}>
+                    {user && (
+                        <React.Fragment>
+                            <Typography align={'center'} variant={'h4'}>Account</Typography>
+
+                            <Grid alignContent={"flex-end"}>
+                                <Button
+                                    onClick={() => userLogout()}
+                                    variant={"contained"}
+                                    color={"primary"}>
+                                    Uitloggen
+                                </Button>
+                            </Grid>
+
+
+                        </React.Fragment>
+                    ) || <Login/>}
                 </Grid>
             </Grid>
-
-            {/*<Card>*/ }
-            {/*    <CardContent/>*/ }
-            {/*</Card>*/ }
 
         </React.Fragment>
     );
 };
 
-export default Account;
+export default connect((state) => ({...state}), {...authenticationActions})(Account);
