@@ -15,7 +15,7 @@ function* login() {
     formData.append('password', authenticationState.password);
     formData.append('_csrf_token', authenticationState.csrf);
 
-    const user = yield call(() => fetch('account/login', {
+    const user = yield call(() => fetch('/account/login', {
         method: 'POST',
         body: formData
     }).then(response => (response.ok) ? response.json() : null)
@@ -39,7 +39,7 @@ function* logout() {
     console.log(authenticationState);
 
 
-    const response = yield call(() => fetch('account/logout/' + authenticationState.csrf).then(response => (response.ok) ? response.json() : null)
+    const response = yield call(() => fetch('/account/logout/' + authenticationState.csrf).then(response => (response.ok) ? response.json() : null)
         .then(response => response).catch((e) => {
             console.log(e);
             return null;

@@ -1,7 +1,31 @@
 body {
-    background-image: url("https://decoratorsnotebook.files.wordpress.com/2013/04/dsc_0048.jpg");
+
+}
+
+#bg {
+    background-image: url("../img/emmerlijstje-bg.jpg");
     height: 100vh;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    opacity: 0.7;
 }
+
+#react {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.paper {
+    max-width: 1080px;
+    width: 90%;
+    margin: 2rem auto 0;
+    padding: 2rem;
+
+    a {
+        color: #313131;
+    }
+}
+

@@ -1,30 +1,67 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {Grid, Typography} from '@material-ui/core';
-import {connect} from "react-redux";
-import * as authenticationActions from "../actions/authentication";
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography } from '@material-ui/core';
+import { connect } from 'react-redux';
+import * as authenticationActions from '../actions/authentication';
+import { Link, withRouter } from 'react-router-dom';
 
-const BucketList = ({authentication}) => {
+const BucketList = ({ authentication, match }) => {
+    const [ state, setState ] = useState({ bucketLists: null, isFetching: true, bucketList: null });
+    const bucketList = match.params.list;
+    const user = match.params.user;
 
-    const {user} = authentication;
-    console.log(user)
-    return (
-        <React.Fragment>
-            <CssBaseline/>
-            <Grid container justify="center">
-                <Grid item xs={12}>
-                    <Typography align={'center'} variant={'h4'}>
-                        {user && `Emmerlijstje van ${user.displayName}` || 'Jouw emmerlijstje'}
-                    </Typography>
+    useEffect(() => {
+        if (bucketList) {
+            fetch('/api/bucketlist/' + bucketList).then(r => r.json()).then((data) => {
+                setState({ bucketList: data, isFetching: false })
+            }).catch(() => setState({ bucketList: null, isFetching: false }));
+        } else {
+            if (user) {
+                fetch('/api/user/bucketlists').then(r => r.json()).then((data) => {
+                    setState({ bucketLists: data, isFetching: false })
+                }).catch(() => setState({ bucketLists: null, isFetching: false }));
+            }
+        }
+    }, [ user ]);
+
+    if (bucketList) {
+        return (
+            <Grid container>
+                <Grid item xs={ 12 }>
+                    { !state.isFetching && state.bucketList ? (
+                        <React.Fragment>
+                            <Typography variant={ 'h4' }>{ `${ state.bucketList.name }` }</Typography>
+                            <Typography component={ 'span' } variant={ 'subheading' }>
+                                { user && `Emmerlijstje van ${ state.bucketList.user.displayName }` }
+                            </Typography>
+                        </React.Fragment>
+                    ) : <div/> }
+
                 </Grid>
-
             </Grid>
-            {/*<Card>*/}
-            {/*    <CardContent/>*/}
-            {/*</Card>*/}
+        );
+    }
 
-        </React.Fragment>
+    return (
+        <Grid container>
+            <Grid item xs={ 12 }>
+                <Typography variant={ 'h4' } gutterBottom>
+                    { user && `Emmerlijstjes van ${ user }` || 'Jouw emmerlijstjes' }
+                </Typography>
+            </Grid>
+
+            <Grid item xs={ 12 }>
+                { !state.isFetching && state.bucketLists.length > 0 ? <div>
+                    { state.bucketLists.map((list) => {
+                        return <Typography key={ list.slug }>
+                            <Link to={ `/u/${ list.user.username }/${ list.slug }` }>
+                                { list.name } van { list.user.displayName }
+                            </Link>
+                        </Typography>
+                    }) }
+                </div> : <Typography>Je hebt nog geen emmerlijstjes.</Typography> }
+            </Grid>
+        </Grid>
     );
 };
 
-export default connect((state) => ({...state}), {...authenticationActions})(BucketList);
+export default connect((state) => ({ ...state }), { ...authenticationActions })(withRouter(BucketList));

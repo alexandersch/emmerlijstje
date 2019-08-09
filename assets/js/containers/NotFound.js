@@ -10,13 +10,9 @@ const NotFound = (props) => {
 
             <Grid container justify="center">
                 <Grid item xs={ 12 }>
-                    <Typography align={ 'center' } variant={ 'h3' }>Niet gevonden</Typography>
+                    <Typography variant={ 'h3' }>Niet gevonden</Typography>
                 </Grid>
             </Grid>
-
-            {/*<Card>*/ }
-            {/*    <CardContent/>*/ }
-            {/*</Card>*/ }
 
         </React.Fragment>
     );

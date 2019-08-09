@@ -16,7 +16,7 @@ const Account = (props) => {
                 <Grid item xs={11} md={6}>
                     {user && (
                         <React.Fragment>
-                            <Typography align={'center'} variant={'h4'}>Account</Typography>
+                            <Typography  variant={'h4'}>Account</Typography>
 
                             <Grid alignContent={"flex-end"}>
                                 <Button

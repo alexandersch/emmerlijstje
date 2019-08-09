@@ -13,11 +13,6 @@ const Profile = ({ user }) => {
                     <Typography align={ 'center' } variant={ 'h3' }>{user.name}</Typography>
                 </Grid>
             </Grid>
-
-            {/*<Card>*/ }
-            {/*    <CardContent/>*/ }
-            {/*</Card>*/ }
-
         </React.Fragment>
     );
 };

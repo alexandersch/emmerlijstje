@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface, \JsonSerializable
+class User implements UserInterface, JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -37,6 +40,16 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BucketList", mappedBy="user", orphanRemoval=true)
+     */
+    private $bucketLists;
+
+    public function __construct()
+    {
+        $this->bucketLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,5 +152,36 @@ class User implements UserInterface, \JsonSerializable
             "displayName" => $this->getDisplayName(),
             "roles" => $this->getRoles()
         ];
+    }
+
+    /**
+     * @return Collection|BucketList[]
+     */
+    public function getBucketLists(): Collection
+    {
+        return $this->bucketLists;
+    }
+
+    public function addBucketList(BucketList $bucketList): self
+    {
+        if (!$this->bucketLists->contains($bucketList)) {
+            $this->bucketLists[] = $bucketList;
+            $bucketList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBucketList(BucketList $bucketList): self
+    {
+        if ($this->bucketLists->contains($bucketList)) {
+            $this->bucketLists->removeElement($bucketList);
+            // set the owning side to null (unless already changed)
+            if ($bucketList->getUser() === $this) {
+                $bucketList->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
