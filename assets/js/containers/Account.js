@@ -12,13 +12,13 @@ const Account = (props) => {
     return (
         <React.Fragment>
 
-            <Grid container justify="center">
+            <Grid container>
                 <Grid item xs={11} md={6}>
                     {user && (
                         <React.Fragment>
                             <Typography  variant={'h4'}>Account</Typography>
 
-                            <Grid alignContent={"flex-end"}>
+                            <Grid container alignContent={"flex-end"}>
                                 <Button
                                     onClick={() => userLogout()}
                                     variant={"contained"}

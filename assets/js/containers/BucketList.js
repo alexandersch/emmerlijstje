@@ -45,20 +45,24 @@ const BucketList = ({ authentication, match }) => {
         <Grid container>
             <Grid item xs={ 12 }>
                 <Typography variant={ 'h4' } gutterBottom>
-                    { user && `Emmerlijstjes van ${ user }` || 'Jouw emmerlijstjes' }
+                    { authentication.user && user === authentication.user.username || !user
+                        ? 'Jouw emmerlijstjes'
+                        : `Emmerlijstjes van ${ user.displayName }`
+                    }
                 </Typography>
             </Grid>
 
             <Grid item xs={ 12 }>
-                { !state.isFetching && state.bucketLists.length > 0 ? <div>
+                { state.isFetching ? <div/> : state.bucketLists.length > 0 ? <div>
                     { state.bucketLists.map((list) => {
                         return <Typography key={ list.slug }>
                             <Link to={ `/u/${ list.user.username }/${ list.slug }` }>
-                                { list.name } van { list.user.displayName }
+                                { list.name }
+                                { authentication.user && user !== authentication.user.username && `van ${ list.user }` }
                             </Link>
                         </Typography>
                     }) }
-                </div> : <Typography>Je hebt nog geen emmerlijstjes.</Typography> }
+                </div> : <Typography>Nog geen emmerlijstjes...</Typography> }
             </Grid>
         </Grid>
     );
